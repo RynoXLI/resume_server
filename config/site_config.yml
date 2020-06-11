@@ -1,8 +1,156 @@
 index:
   title: "Ryan.Fogle"
   jumbo_text: ">>>Ryan.Fogle"
-  jumbo_pic_url: ""
+  jumbo_pic_url: "static/images/field.jpg"
   icon_text: "Ryan.Fogle"
   sections:
-    -section_title: Education
-    -
+    - section: "About Me"
+      href: "aboutme"
+      pic_url: "static/images/ryan.jpg"
+      alt: "Picture of Ryan"
+      text: "Hello I am Ryan Fogle. I am a Senior at the University of Illinois where I am pursuing a
+                                     Bachelor in Agricultural Engineering with a focus in Off-Road Machinery. I have a diverse
+                                     number of experiences from machine design to data analytics. I am seeking
+                                     opportunities that are on the edge of Data Science and Engineering."
+    - section: "Education"
+      href: "education"
+      schools:
+        - school: "University of Illinois at Urbana-Champaign"
+          pic_url: "static/images/illini.jpg"
+          alt: "Illini Logo"
+          degree: "Bachelor of Science in Agricultural Engineering"
+          grad_year: "Spring 2021"
+          gpa: "GPA: 3.83"
+          awards:
+            title: "Honors and Leadership"
+            items:
+              - "Dean's List"
+              - "2020 Bauling/Perish Award Recipient"
+              - "2019 Bauling/Perish Award Recipient"
+        - school: "Illinois Central College"
+          pic_url: "static/images/icc.jpg"
+          degree: "Engineering Undergraduate"
+          grad_year: "Transferred Fall 2019"
+          gpa: "GPA: 3.87"
+          awards:
+            title: "Honors and Leadership"
+            items:
+              - "Dean's List"
+              - "2018 Computer Science Club Found and President"
+              - "2018 Phi Kappa Theta Honor Society Member"
+    - section: "Relevant Experiences"
+      href: "experiences"
+      companies:
+      - company: "Caterpillar Inc."
+        pic_url: "static/images/cat.jpg"
+        alt: "Caterpillar Logo"
+        job_title: "Data Analytics Intern, Backend Development"
+        location: "Champaign, IL"
+        date_range: "March 2020 - Current"
+        description:
+          title: "Job Description"
+          items:
+            - "Created, updated, and maintained tables in a MySQL database."
+            - "Created a parser with regular expressions to create conditional arguments for analyses."
+            - "Revised a REST application programming interface on a Flask framework."
+            - "Served as team leader role for summer interns."
+      - company: "Caterpillar Inc."
+        pic_url: "static/images/cat.jpg"
+        job_title: "Engineering Intern, Remanufacturing"
+        location: "Champaign, IL"
+        date_range: "May 2020 - March 2020"
+        description:
+          title: "Job Description"
+          items:
+            - "Designed multiple new fuel filter iterations for an injector to service it for a longer lifetime."
+            - "Worked with remanufacturing engineers to devise new salvage processes."
+            - "Identified salvageable parts and unsalvageable parts on injector families."
+            - "Developed and implemented Python scripts for data analytics."
+            - "Created new database collection scheme for injector test data saving engineers an hour a day in data entry."
+      - company: "Caterpillar Inc."
+        pic_url: "static/images/cat.jpg"
+        job_title: "Student Trainee, Control Systems"
+        location: "Mossville, IL"
+        date_range: "May 2018 - May 2019"
+        description:
+          title: "Job Description"
+          items:
+            - "Applied new data management techniques through simplifying a 18,000 rowed database table to 200 rowed table."
+            - "Developed an in-depth Python algorithm for flash file compilation and compression which reduced file size by 90 percent."
+            - "Implemented both back-end and front-end programming by creating graphical user interfaces."
+            - "Maintained schedules for multiple programming projects."
+      - company: "Illinois Central College"
+        pic_url: "static/images/icc.jpg"
+        job_title: "Mathematics, Physics, and Computer Science Tutor"
+        location: "East Peoria, IL"
+        date_range: "August 2017 - December 2019"
+        description:
+          title: "Job Description"
+          items:
+            - "Coached students how to take limits, integrals, and derivatives."
+            - "Taught students the importance of object-oriented programming."
+            - "Tutored students in Calculus III, calculus-based Physics, and Java."
+    - section: "Technical Skills"
+      href: "skills"
+      skills:
+        - title: "Applications:"
+          items:
+          - name: "Git"
+            pic_url: "static/images/git.png"
+          - name: "MATLAB"
+            pic_url: "static/images/matlab.png"
+          - name: "Creo"
+            pic_url: "static/images/creo.png"
+          - name: "Inventor"
+            pic_url: "static/images/inventor.png"
+          - name: "MS Office"
+            pic_url: "static/images/microsoft.png"
+          - name: "MySQL"
+            pic_url: "static/images/mysql.png"
+        - title: "Programming Languages:"
+          items:
+          - name: "Python"
+            pic_url: "static/images/python.png"
+          - name: "SQL"
+            pic_url: "static/images/sql.png"
+          - name: "Java"
+            pic_url: "static/images/java.png"
+          - name: "Visual Basic"
+            pic_url: "static/images/vb.png"
+          - name: "Javascript"
+            pic_url: "static/images/js.png"
+        - title: "Other Misc. Languages:"
+          items:
+          - name: "HTML"
+            pic_url: "static/images/html.png"
+          - name: "CSS"
+            pic_url: "static/images/css.png"
+          - name: "JSON"
+            pic_url: "static/images/json.png"
+          - name: "YAML"
+            pic_url: "static/images/yaml.png"
+    - section: "Contact Me"
+      href: "contact"
+      contacts:
+      - title: "Email Address:"
+        value: "rsfogle2@illinois.edu"
+      - title: "Phone Number:"
+        value: "(309) 310-7926"
+      - title: "Address"
+        value: "1010 W Springfield, Urbana, IL 61729. Apt 305"
+      - title: "Other Contacts:"
+        value:
+          - title: "LinkedIn"
+            pic_url: "static/images/linkedin.png"
+            redirect_url: "http://www.linkedin.com/in/ryan-s-fogle"
+          - title: "Git"
+            pic_url: "static/images/github.png"
+            redirect_url: "https://github.com/RynoXLI"
+  footer_url: "static/images/combine.jpg"
+
+
+
+
+
+
+
