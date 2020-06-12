@@ -8,10 +8,10 @@ index:
       href: "aboutme"
       pic_url: "static/images/ryan.jpg"
       alt: "Picture of Ryan"
-      text: "Hello I am Ryan Fogle. I am a Senior at the University of Illinois where I am pursuing a
-                                     Bachelor in Agricultural Engineering with a focus in Off-Road Machinery. I have a diverse
-                                     number of experiences from machine design to data analytics. I am seeking
-                                     opportunities that are on the edge of Data Science and Engineering."
+      text: "Hello, I am Ryan Fogle. I am a senior at the University of Illinois pursuing a
+                                     Bachelor in Agricultural Engineering with a focus in Off-Road Machinery. I have had diverse
+                                     experiences ranging from machine design to data analytics. Moving forward, I am seeking
+                                     opportunities that incorporate both Data Science and Engineering."
     - section: "Education"
       href: "education"
       schools:
@@ -148,6 +148,12 @@ index:
             redirect_url: "https://github.com/RynoXLI"
   footer_url: "static/images/combine.jpg"
 
+
+smtp:
+  hostname: "localhost"
+  port: 1025
+  username: ""
+  password: ""
 
 
 
