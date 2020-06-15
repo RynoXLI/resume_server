@@ -55,13 +55,6 @@
     object-fit:cover;
 }
 
-.input-group>.input-group-prepend {
-    flex: 0 0 6%;
-}
-.input-group .input-group-text {
-    width: 100%;
-}
-
 .custom-control-label:before{
   background-color:white;
 }

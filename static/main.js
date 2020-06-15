@@ -10,7 +10,7 @@ function scolling() {
 
 var offset = $(".navbar").height() + $(".header").height() + $("#collapsibleNavbar").height();
 
-$('.navbar li a').click(function(event) {
+$('.navbar li a.anchor').click(function(event) {
     event.preventDefault();
     $($(this).attr('href'))[0].scrollIntoView();
     scrollBy(0, -offset);

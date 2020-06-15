@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block addmeta %}
+    <meta http-equiv="refresh" content="5;url={{ url_for('home') }}" />
+{% endblock addmeta %}
+{% block navbar %}
+{% endblock navbar %}
+{% block content %}
+<div class="container p-3 my-3 ">
+    <div class="row justify-content-center">
+        <h1 class="font-weight-bold justify-content-center">Thank you!</h1>
+    </div>
+    <div class="row justify-content-center">
+        <p>You will be redirected in (<span id="countdown">5</span>) seconds.</p>
+    </div>
+</div>
+
+<script>
+    var timeleft = 5;
+    var downloadTimer = setInterval(function(){
+      if(timeleft <= 0){
+        clearInterval(downloadTimer);
+        document.getElementById("countdown").innerHTML = timeleft;
+      } else {
+        document.getElementById("countdown").innerHTML = timeleft;
+      }
+      timeleft -= 1;
+    }, 1000);
+</script>
+{% endblock content %}

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import yaml
 import os
@@ -22,6 +22,19 @@ s = smtplib.SMTP(host=conf['smtp']['hostname'], port=conf['smtp']['port'])
 # s.login(user="", password="")
 
 
+from wtforms import Form, BooleanField, StringField, validators, TextAreaField, SubmitField
+from wtforms.fields.html5 import EmailField
+
+
+class Message(Form):
+     email = EmailField('Email Address', [validators.DataRequired(), validators.Email()])
+     fname = StringField("First Name", [validators.Length(min=1, max=60)])
+     lname = StringField("Last Name", [validators.Length(min=1, max=60)])
+     msg = TextAreaField("Message", [validators.DataRequired()])
+     cc = BooleanField("Email Copy")
+     submit = SubmitField("Submit")
+
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
@@ -34,41 +47,55 @@ class Post(db.Model):
         return '<Post %r' % self.email
 
 
-@app.route('/', methods=["GET", "POST"])
-def new_home():
+@app.route('/')
+def home():
     now = datetime.now()
+    return render_template('index.html', time=now, conf=conf['index'])
 
-    if request.method == "POST":
-        email = request.form.get("email")
-        fname = request.form.get('firstname')
-        lname = request.form.get('lastname')
-        msg = request.form.get('msg')
-        send_email = request.form.get('sendemail')
-        print(f"Email:{email}, fname:{fname}, lname:{lname}, msg:{msg}, send_email:{send_email}")
 
-        if email and fname and lname and msg:
-            p = Post(email=email, fname=fname, lname=lname, msg=msg)
-            db.session.add(p)
-            db.session.commit()
+@app.route('/message', methods=['GET', 'POST'])
+def message():
+    now = datetime.now()
+    form = Message(request.form)
+    form.lname()
+    if request.method == "POST" and form.validate():
+        print(f"Email:{form.email.data}, fname:{form.fname.data}, lname:{form.lname.data}, msg:{form.msg.data}, cc:{form.cc.data}")
 
-        if send_email and email and fname and lname and msg:
+        p = Post(email=form.email.data, fname=form.fname.data, lname=form.lname.data, msg=form.msg.data, pub_time=now)
+        db.session.add(p)
+        db.session.commit()
+
+        if form.cc.data:
             email_msg = MIMEMultipart()
-            message = message_template.substitute(fname=fname,
-                                                  lname=lname,
-                                                  email=email,
-                                                  msg=msg,
+            message = message_template.substitute(fname=form.fname.data,
+                                                  lname=form.lname.data,
+                                                  email=form.email.data,
+                                                  msg=form.msg.data,
                                                   time=now)
 
             # setup msg parms
             email_msg['From'] = "localhost"
-            email_msg['To'] = email
+            email_msg['To'] = form.email.data
             email_msg['Subject'] = "Message Record"
             email_msg.attach(MIMEText(message, 'plain'))
 
             s.send_message(email_msg)
             print("Sending email...")
+        return redirect(url_for('thankyou'))
 
-    return render_template('base.html', time=now, conf=conf['index'])
+    return render_template('message.html', time=now, conf=conf['index'], form=form)
+
+
+@app.route('/thankyou')
+def thankyou():
+    now = datetime.now()
+    return render_template('thankyou.html', time=now, conf=conf['index'])
+
+
+@app.route('/more')
+def more():
+    now = datetime.now()
+    return render_template('more.html', time=now, conf=conf['index'])
 
 
 if __name__ == '__main__':

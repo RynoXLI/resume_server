@@ -5,14 +5,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}?t={{ time }}">
+
+        {% block addmeta %}
+        {% endblock addmeta %}
+
     </head>
-    <body data-spy="scroll" data-target=".navbar" data-offset="300">
+    <body data-spy="scroll" data-target="#navbar" data-offset="300">
         <div class="jumbotron mb-0 text-dark" style="background-image: url( {{ conf['jumbo_pic_url'] }});">
           <h1 class="jumbowords" >{{ conf['jumbo_text'] }}<br></h1>
         </div>
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top pl-0 pt-3 pb-3">
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top pl-0 pt-3 pb-3" id="navbar">
             <!-- Brand/logo -->
-            <a class="navbar-brand pl-3" href="#">{{ conf['title'] }}</a>
+            <a class="navbar-brand pl-3" href="{{ url_for('home') }}">{{ conf['title'] }}</a>
             <!-- Toggler/collapsibe Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -20,11 +24,8 @@
             <!-- Links -->
             <div class="navbar-collapse collapse pl-3" id="collapsibleNavbar">
                 <ul class="navbar-nav ml-auto">
-                    {% for section in conf['sections'] %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#{{ section['href'] }}"> {{ section['section'] }}</a>
-                    </li>
-                    {% endfor %}
+                    {% block navbar %}
+                    {% endblock navbar %}
                 </ul>
             </div>
             <div class="header">
@@ -33,142 +34,65 @@
               </div>
             </div>
         </nav>
-        {% for section in conf['sections'] %}
-            <div id="{{ section['href'] }}" class="container p-3 my-3 border">
-                <h1 class="font-weight-bold">{{ section['section'] }}</h1>
+        {% block content %}
+        {% endblock content %}
 
-                {% if section['href'] == "aboutme" %}
-                    <div class="row pb-3 align-items-center">
-                        <div class="col-xs-12 col-md-3">
-                            <img src="{{ section['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ section['alt'] }}">
-                        </div>
-                        <div class="col-xs-* col-md-9">
-                            <p class="lead p-4">{{ section['text'] }}</p>
-                        </div>
+        <!-- Footer -->
+        <footer class="page-footer font-small mdb-color pt-4">
+            <div class="container text-center text-md-left">
+                <div class="row text-center text-md-left mt-3 pb-3">
+                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Ryan.Fogle</h6>
+                        <p>Thank you for visiting. Please contact me for any additional information or leave me a message.</p>
                     </div>
-                {% elif section['href'] == "education" %}
-                    {% for school in section['schools'] %}
-                    <div class="row pb-3">
-                        <div class="col-xs-12 col-md-3">
-                            <img src="{{ school['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ school['alt'] }}">
-                        </div>
-                        <div class="col-xs-* col-md-9 pt-3">
-                            <h5 class="pl-3 pr-3">{{ school['school'] }}</h5>
-                            <p class="pl-3 pr-3">{{ school['degree'] }}<br>
-                                {{ school['grad_year'] }}<br>
-                                {{ school['gpa'] }} <br>
-                                </p>
-                        </div>
+                    <hr class="w-100 clearfix d-md-none">
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                        <h6 class="text-uppercase mb-4 font-weight-bold">More</h6>
+                        <p><a href="{{ url_for('message') }}">Leave a Message</a></p>
+                        <p><a href="{{ url_for('static', filename='ryanfogle_resume.pdf') }}" download>Download Resume</a></p>
+                        <p><a href="{{ url_for('more') }}">See More</a></p>
                     </div>
-                    <div class="col p-4 my-3 border align-items-center">
-                        <h5>{{ school['awards']['title'] }}</h5>
-                        <ul>
-                            {% for item in school['awards']['items'] %}
-                                <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
+                    <hr class="w-100 clearfix d-md-none">
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                        <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+                        <p><i class="fas fa-home mr-3"></i> 1010 W Springfield, Urbana, IL 61801. Apt 305</p>
+                        <p><i class="fas fa-envelope mr-3"></i> rsfogle2@illinois.edu</p>
+                        <p><i class="fas fa-phone mr-3"></i> +1 (309) 310-7926</p>
                     </div>
-                    {% endfor %}
-                {% elif section['href'] == "experiences" %}
-                    {% for company in section['companies'] %}
-                        <div class="row">
-                            <div class="col-xs-12 col-md-3">
-                                <img src="{{ company['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ company['alt'] }}">
-                            </div>
-                            <div class="col-xs-* col-md-9 pt-3">
-                                <h5 class="pl-3 pr-3"> {{ company['company'] }} </h5>
-                                <p class="pl-3 pr-3"> {{ company['job_title'] }} <br>
-                                    {{ company['location'] }} <br>
-                                    {{ company['date_range'] }} <br>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col p-4 my-3 border align-items-center">
-                            <h5>{{ company['description']['title'] }}</h5>
-                            <ul>
-                                {% for item in company['description']['items'] %}
-                                <li> {{ item }}</li>
-                                {% endfor %}
+                </div>
+                <hr>
+                <div class="row d-flex align-items-center">
+                    <div class="col-md-7 col-lg-8">
+                        <p class="text-center text-md-left">© 2020 Copyright:
+                        <a href="https://www.ryan-fogle.com/">
+                            <strong> Ryan-Fogle.com</strong>
+                        </a>
+                        </p>
+                    </div>
+                    <div class="col-md-5 col-lg-4 ml-lg-0">
+                        <div class="text-center text-md-right">
+                            <ul class="list-unstyled list-inline">
+                                <li class="list-inline-item">
+                                    <a href="http://www.linkedin.com/in/ryan-s-fogle" class="btn-floating btn-sm rgba-white-slight mx-1" style="color:inherit;">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="https://github.com/RynoXLI" class="btn-floating btn-sm rgba-white-slight mx-1" style="color:inherit;">
+                                    <i class="fab fa-github"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
-                    {% endfor %}
-                {% elif section['href'] == "skills" %}
-                    {% for skill in section['skills'] %}
-                        <div class="row align-items-center">
-                            <div class="col-3-md col-2-lg pl-5">
-                                <h5 class="font-weight-bold">{{ skill['title'] }}</h5>
-                            </div>
-                            {% for item in skill['items'] %}
-                                <div class="col-xs-4 col-md-1">
-                                    <img src="{{ item['pic_url'] }}" alt="{{ item['name'] }}" class="application img-thumbnail p-1 m-1 img-responsive"
-                                         data-toggle="tooltip" title="{{ item['name'] }}">
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                {% elif section['href'] == "contact" %}
-                    {% for contact in section['contacts'] %}
-                        <div class="row align-items-center pl-5">
-                            <div class="col-*-*">
-                                <h5 class="font-weight-bold">{{ contact['title'] }}</h5>
-                            </div>
-                            {% if contact['title'] != "Other Contacts:" %}
-                                <div class="col-*-* pl-3 pr-3">
-                                    <h6>{{ contact['value'] }} </h6>
-                                </div>
-                            {% else %}
-                                {% for value in contact['value'] %}
-                                    <div class="col-xs-4 col-md-1">
-                                        <a href="{{ value['redirect_url'] }}"><img
-                                                src="{{ value['pic_url'] }}" alt="{{ value['title'] }}"
-                                                class="application img-thumbnail p-1 m-1 img-responsive" data-toggle="tooltip"
-                                                title="{{ value['title'] }}"></a>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                    </div>
+                </div>
             </div>
-        {% endfor %}
-
-        <div id="messageme" class="container p-3 my-3 border">
-                <h1 class="font-weight-bold">Drop a message!</h1>
-
-            <form method="POST" action="">
-                <div class="input-group pt-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text text-center">Email Address:</span>
-                    </div>
-                    <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
-                </div>
-                <div class="input-group pt-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text text-center">First Name:</span>
-                    </div>
-                    <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="firstname">
-                </div>
-                <div class="input-group pt-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text text-center">Last Name:</span>
-                    </div>
-                    <input type="text" class="form-control" id="lastname" placeholder="Enter last name" name="lastname">
-                </div>
-                <div class="form-group pt-2">
-                    <label for="msg">Message:</label>
-                    <textarea class="form-control" rows="5" id="msg" name="msg"></textarea>
-                </div>
-                <div class="custom-control form-control-lg custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="sendemail">
-                    <label class="custom-control-label" for="customCheck1" >Email Copy</label>
-                </div>
-                <button type="submit"  value="Send" class="btn btn-outline-success">Submit</button>
-              </form>
-        </div>
+        </footer>
 
         <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='main.js') }}?t={{ time }}"></script>
+        <script src="https://kit.fontawesome.com/d70b66e20d.js" crossorigin="anonymous"></script>
     </body>
 </html>

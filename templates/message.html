@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('static', filename='ryanfogle_resume.pdf') }}" download>Download Resume</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('more') }}">See More</a>
+    </li>
+{% endblock navbar %}
+{% block content %}
+<div class="container p-3 my-3 border">
+    <h2 class="title">Leave a Message</h2>
+    <form method="post" action="">
+        {% if form.email.errors %}
+            <div class="form-group">{{ form.email.label }} {{ form.email(**{'class':'form-control is-invalid'}) }}
+                <ul class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="form-group">{{ form.email.label }} {{ form.email(**{'class':'form-control'}) }}</div>
+        {% endif %}
+        {% if form.fname.errors %}
+            <div class="form-group">{{ form.fname.label }} {{ form.fname(**{'class':'form-control is-invalid'}) }}
+                <ul class="invalid-feedback">
+                    {% for error in form.fname.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="form-group">{{ form.fname.label }} {{ form.fname(**{'class':'form-control'}) }}</div>
+        {% endif %}
+        {% if form.lname.errors %}
+            <div class="form-group">{{ form.lname.label }} {{ form.lname(**{'class':'form-control is-invalid'}) }}
+                <ul class="invalid-feedback">
+                    {% for error in form.lname.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="form-group">{{ form.lname.label }} {{ form.lname(**{'class':'form-control'}) }}</div>
+        {% endif %}
+        {% if form.msg.errors %}
+            <div class="form-group">{{ form.msg.label }} {{ form.msg(**{'class':'form-control is-invalid', 'rows':'3'}) }}
+                <ul class="invalid-feedback">
+                    {% for error in form.msg.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="form-group">{{ form.msg.label }} {{ form.msg(**{'class':'form-control', 'rows':'3'}) }}</div>
+        {% endif %}
+        <div class="custom-control form-control-lg custom-checkbox">
+             {{ form.cc(**{'class':'custom-control-input'}) }} {{ form.cc.label(**{'class':'custom-control-label'}) }}
+        </div>
+    {{ form.submit(**{'class':'btn btn-outline-success'}) }}
+  </form>
+</div>
+{% endblock content %}

@@ -129,24 +129,6 @@ index:
             pic_url: "static/images/json.png"
           - name: "YAML"
             pic_url: "static/images/yaml.png"
-    - section: "Contact Me"
-      href: "contact"
-      contacts:
-      - title: "Email Address:"
-        value: "rsfogle2@illinois.edu"
-      - title: "Phone Number:"
-        value: "(309) 310-7926"
-      - title: "Address"
-        value: "1010 W Springfield, Urbana, IL 61729. Apt 305"
-      - title: "Other Contacts:"
-        value:
-          - title: "LinkedIn"
-            pic_url: "static/images/linkedin.png"
-            redirect_url: "http://www.linkedin.com/in/ryan-s-fogle"
-          - title: "Git"
-            pic_url: "static/images/github.png"
-            redirect_url: "https://github.com/RynoXLI"
-  footer_url: "static/images/combine.jpg"
 
 
 smtp:
