@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from wtforms import Form, BooleanField, StringField, validators, TextAreaField, SubmitField
+from wtforms.fields.html5 import EmailField
 import yaml
-import os
 from datetime import datetime
-import smtplib
+import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -16,14 +17,8 @@ db = SQLAlchemy(app)
 # load the config file
 conf = yaml.load(open("config/site_config.yml", "r"), Loader=yaml.Loader)
 
-# start smtp connection
-s = smtplib.SMTP(host=conf['smtp']['hostname'], port=conf['smtp']['port'])
-# s.starttls()
-# s.login(user="", password="")
-
-
-from wtforms import Form, BooleanField, StringField, validators, TextAreaField, SubmitField
-from wtforms.fields.html5 import EmailField
+# load email_info.yml
+email_info = yaml.load(open("config/email_info.yml", 'r'), Loader=yaml.Loader)
 
 
 class Message(Form):
@@ -74,13 +69,19 @@ def message():
                                                   time=now)
 
             # setup msg parms
-            email_msg['From'] = "localhost"
+            email_msg['From'] = email_info['email']
             email_msg['To'] = form.email.data
             email_msg['Subject'] = "Message Record"
             email_msg.attach(MIMEText(message, 'plain'))
 
-            s.send_message(email_msg)
-            print("Sending email...")
+            context = ssl.create_default_context()
+            with smtplib.SMTP(email_info['smtp'], email_info['port']) as server:
+                server.ehlo()  # Can be omitted
+                server.starttls(context=context)
+                server.ehlo()  # Can be omitted
+                server.login(email_info['email'], email_info['password'])
+                server.sendmail(email_info['email'], form.email.data, email_msg)
+
         return redirect(url_for('thankyou'))
 
     return render_template('message.html', time=now, conf=conf['index'], form=form)
@@ -96,6 +97,12 @@ def thankyou():
 def more():
     now = datetime.now()
     return render_template('more.html', time=now, conf=conf['index'])
+
+
+@app.errorhandler(404)
+def error_404(e):
+    now = datetime.now()
+    return render_template('error_404.html', time=now, conf=conf['index']), 404
 
 
 if __name__ == '__main__':

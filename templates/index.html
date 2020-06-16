@@ -17,12 +17,12 @@
 {% block content %}
 {% for section in conf['sections'] %}
     <div id="{{ section['href'] }}" class="container p-3 my-3 border">
-        <h1 class="font-weight-bold">{{ section['section'] }}</h1>
+        <h1 class="font-weight-bold m-3">{{ section['section'] }}</h1>
 
         {% if section['href'] == "aboutme" %}
             <div class="row pb-3 align-items-center">
                 <div class="col-xs-12 col-md-3">
-                    <img src="{{ section['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ section['alt'] }}">
+                    <img src="{{ section['pic_url'] }}?t={{ time }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ section['alt'] }}">
                 </div>
                 <div class="col-xs-* col-md-9">
                     <p class="lead p-4">{{ section['text'] }}</p>
@@ -32,7 +32,7 @@
             {% for school in section['schools'] %}
             <div class="row pb-3">
                 <div class="col-xs-12 col-md-3">
-                    <img src="{{ school['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ school['alt'] }}">
+                    <img src="{{ school['pic_url'] }}?t={{ time }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ school['alt'] }}">
                 </div>
                 <div class="col-xs-* col-md-9 pt-3">
                     <h5 class="pl-3 pr-3">{{ school['school'] }}</h5>
@@ -55,7 +55,7 @@
             {% for company in section['companies'] %}
                 <div class="row">
                     <div class="col-xs-12 col-md-3">
-                        <img src="{{ company['pic_url'] }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ company['alt'] }}">
+                        <img src="{{ company['pic_url'] }}?t={{ time }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="{{ company['alt'] }}">
                     </div>
                     <div class="col-xs-* col-md-9 pt-3">
                         <h5 class="pl-3 pr-3"> {{ company['company'] }} </h5>
@@ -76,13 +76,13 @@
             {% endfor %}
         {% elif section['href'] == "skills" %}
             {% for skill in section['skills'] %}
-                <div class="row align-items-center">
-                    <div class="col-3-md col-2-lg pl-5">
+                <div class="text-center p-3">
                         <h5 class="font-weight-bold">{{ skill['title'] }}</h5>
-                    </div>
+                </div>
+                <div class="row align-items-center border ml-3 mr-3">
                     {% for item in skill['items'] %}
-                        <div class="col-xs-4 col-md-1">
-                            <img src="{{ item['pic_url'] }}" alt="{{ item['name'] }}" class="application img-thumbnail p-1 m-1 img-responsive"
+                        <div class="col">
+                            <img src="{{ item['pic_url'] }}?t={{ time }}" alt="{{ item['name'] }}" class="minisquare mx-auto d-block"
                                  data-toggle="tooltip" title="{{ item['name'] }}">
                         </div>
                     {% endfor %}

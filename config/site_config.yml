@@ -42,7 +42,7 @@ index:
       href: "experiences"
       companies:
       - company: "Caterpillar Inc."
-        pic_url: "static/images/cat.jpg"
+        pic_url: "static/images/cat.png"
         alt: "Caterpillar Logo"
         job_title: "Data Analytics Intern, Backend Development"
         location: "Champaign, IL"
@@ -50,15 +50,16 @@ index:
         description:
           title: "Job Description"
           items:
-            - "Created, updated, and maintained tables in a MySQL database."
-            - "Created a parser with regular expressions to create conditional arguments for analyses."
             - "Revised a REST application programming interface on a Flask framework."
+            - "Used Python to parallel process and search the contents of 80,000 files."
+            - "Created a parser with regular expressions to create conditional arguments for analyses."
+            - "Created, updated, and maintained tables in a MySQL database."
             - "Served as team leader role for summer interns."
       - company: "Caterpillar Inc."
-        pic_url: "static/images/cat.jpg"
+        pic_url: "static/images/cat.png"
         job_title: "Engineering Intern, Remanufacturing"
         location: "Champaign, IL"
-        date_range: "May 2020 - March 2020"
+        date_range: "May 2019 - March 2020"
         description:
           title: "Job Description"
           items:
@@ -68,7 +69,7 @@ index:
             - "Developed and implemented Python scripts for data analytics."
             - "Created new database collection scheme for injector test data saving engineers an hour a day in data entry."
       - company: "Caterpillar Inc."
-        pic_url: "static/images/cat.jpg"
+        pic_url: "static/images/cat.png"
         job_title: "Student Trainee, Control Systems"
         location: "Mossville, IL"
         date_range: "May 2018 - May 2019"
@@ -93,7 +94,7 @@ index:
     - section: "Technical Skills"
       href: "skills"
       skills:
-        - title: "Applications:"
+        - title: "Applications"
           items:
           - name: "Git"
             pic_url: "static/images/git.png"
@@ -107,7 +108,7 @@ index:
             pic_url: "static/images/microsoft.png"
           - name: "MySQL"
             pic_url: "static/images/mysql.png"
-        - title: "Programming Languages:"
+        - title: "Programming Languages"
           items:
           - name: "Python"
             pic_url: "static/images/python.png"
@@ -119,7 +120,7 @@ index:
             pic_url: "static/images/vb.png"
           - name: "Javascript"
             pic_url: "static/images/js.png"
-        - title: "Other Misc. Languages:"
+        - title: "Other Misc. Languages"
           items:
           - name: "HTML"
             pic_url: "static/images/html.png"

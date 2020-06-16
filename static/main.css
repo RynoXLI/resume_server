@@ -65,3 +65,13 @@
 .custom-checkbox .custom-control-input:checked~.custom-control-label::before{
   background-color:#4caf4f;
 }
+
+.square {
+    width: 200px;
+    height: 200px;
+}
+
+.minisquare {
+    width: 100px;
+    height: 100px;
+}

@@ -11,5 +11,30 @@
     </li>
 {% endblock navbar %}
 {% block content %}
-
+<div class="container p-3 my-3 border">
+    <h1 class="font-weight-bold">Website Repo</h1>
+    <p class="lead p-3">Take a look at this website's repository! For this website I used
+        Flask which is a Python web framework to deliver the web pages dynamically.
+        The pages consist of HTML, CSS, and JavaScript.
+    I used Bootstrap 4 and AwesomeFont to deliver the aesthetically pleasing pages, the rest was all me! </p>
+    <h5 class="font-weight-bold text-center">Github</h5>
+        <div class="justify-content-center">
+            <a href="https://github.com/RynoXLI/resume_server">
+                <img src="static/images/github.png" alt="GitHub" class="square mx-auto d-block"
+                 data-toggle="tooltip" title="Go to Github Repo">
+            </a>
+        </div>
+</div>
+<div class="container p-3 my-3 border">
+    <h1 class="font-weight-bold">LinkedIn</h1>
+    <p class="lead p-3">Check me out on LinkedIn! If any co-workers, friends, or family happen to land on this page
+    feel free to endorse me!</p>
+    <h5 class="font-weight-bold text-center">LinkedIn</h5>
+        <div class="justify-content-center">
+            <a href="https://www.linkedin.com/in/ryan-s-fogle/">
+                <img src="static/images/linkedin.png" alt="LinkedIn" class="square mx-auto d-block"
+                 data-toggle="tooltip" title="Go to my LinkedIn">
+            </a>
+        </div>
+</div>
 {% endblock content %}

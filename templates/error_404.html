@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('message') }}">Leave a Message</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('more') }}">See More</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('static', filename='ryanfogle_resume.pdf') }}" download>Download Resume</a>
+    </li>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="font-weight-bold text-center pt-3">Uh-Oh 404</h1>
+    <p class="text-center">Looks like my web server can't find this page.</p>
+    <div class="col text-center">
+        <a href="/">
+            <button class="btn btn-outline-success center-block">Go Home</button>
+        </a>
+    </div>
+</div>
+{% endblock content %}
