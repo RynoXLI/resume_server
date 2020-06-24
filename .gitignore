@@ -3,3 +3,5 @@ site.db
 */__pycache__/
 config/email_info.yml
 *.ipynb
+*.pyc
+ec2-aws.pem
