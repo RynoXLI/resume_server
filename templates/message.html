@@ -12,7 +12,8 @@
 {% endblock navbar %}
 {% block content %}
 <div class="container p-3 my-3 border">
-    <h2 class="title">Leave a Message</h2>
+    <h2 class="font-weight-bold">Leave a Message</h2>
+    <p class="pt-0"><small>I may contact you in response to your message.</small></p>
     <form method="post" action="">
         {% if form.email.errors %}
             <div class="form-group">{{ form.email.label }} {{ form.email(**{'class':'form-control is-invalid'}) }}

@@ -7,6 +7,7 @@ from datetime import datetime
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import jinja2
 
 from config.config import message_template
 
@@ -61,18 +62,21 @@ def message():
         db.session.commit()
 
         if form.cc.data:
+            templateLoader = jinja2.FileSystemLoader(searchpath="./templates")
+            templateEnv = jinja2.Environment(loader=templateLoader)
+            TEMPLATE_FILE = "email.html"
+            template = templateEnv.get_template(TEMPLATE_FILE)
+            outputText = template.render(fname=form.fname.data.title(), msg=form.msg.data, pub_time=now.strftime("%Y-%m-%d %I:%M %p"))  # this is where to put args to the template renderer
+
+            recieve_email = form.email.data
+
             email_msg = MIMEMultipart()
-            message = message_template.substitute(fname=form.fname.data,
-                                                  lname=form.lname.data,
-                                                  email=form.email.data,
-                                                  msg=form.msg.data,
-                                                  time=now)
 
             # setup msg parms
             email_msg['From'] = email_info['email']
-            email_msg['To'] = form.email.data
+            email_msg['To'] = recieve_email
             email_msg['Subject'] = "Message Record"
-            email_msg.attach(MIMEText(message, 'plain'))
+            email_msg.attach(MIMEText(outputText, 'html'))
 
             context = ssl.create_default_context()
             with smtplib.SMTP(email_info['smtp'], email_info['port']) as server:
@@ -80,7 +84,7 @@ def message():
                 server.starttls(context=context)
                 server.ehlo()  # Can be omitted
                 server.login(email_info['email'], email_info['password'])
-                server.sendmail(email_info['email'], form.email.data, email_msg)
+                server.sendmail(email_info['email'], recieve_email, email_msg.as_string())
 
         return redirect(url_for('thankyou'))
 
