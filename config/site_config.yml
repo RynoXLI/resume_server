@@ -36,7 +36,7 @@ index:
             title: "Honors and Leadership"
             items:
               - "Dean's List"
-              - "2018 Computer Science Club Found and President"
+              - "2018 Computer Science Club Founder and President"
               - "2018 Phi Kappa Theta Honor Society Member"
     - section: "Relevant Experiences"
       href: "experiences"
@@ -54,7 +54,7 @@ index:
             - "Used Python to parallel process and search the contents of 80,000 files."
             - "Created a parser with regular expressions to create conditional arguments for analyses."
             - "Created, updated, and maintained tables in a MySQL database."
-            - "Served as team leader role for summer interns."
+            - "Served as team leader for summer interns."
       - company: "Caterpillar Inc."
         pic_url: "static/images/cat.png"
         job_title: "Engineering Intern, Remanufacturing"
