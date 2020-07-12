@@ -1,8 +1,10 @@
-index:
+base:
   title: "Ryan.Fogle"
   jumbo_text: ">>>Ryan.Fogle"
   jumbo_pic_url: "static/images/field.jpg"
   icon_text: "Ryan.Fogle"
+
+index:
   sections:
     - section: "About Me"
       href: "aboutme"
@@ -131,6 +133,25 @@ index:
           - name: "YAML"
             pic_url: "static/images/yaml.png"
 
+more:
+  sections:
+    - title: "Website Repo"
+      body: "Take a look at this website's repository! For this website I used
+                   Flask which is a Python web framework to deliver the web pages dynamically.
+                   The pages consist of HTML, CSS, and JavaScript.
+               I used Bootstrap 4 and AwesomeFont to deliver the aesthetically pleasing pages, the rest was all me!
+               I host this web server on an AWS EC2 instance through Nginx."
+      pic_name: "Github"
+      pic_url: "static/images/github.png"
+      pic_link: "https://github.com/RynoXLI/resume_server"
+      pic_tooltip: "Go to Github Repo"
+    - title: "LinkedIn"
+      body: "Check me out on LinkedIn! If any co-workers, friends, or family happen to land on this page
+                 feel free to endorse me!"
+      pic_name: "LinkedIn"
+      pic_url: "static/images/linkedin.png"
+      pic_link: "https://www.linkedin.com/in/ryan-s-fogle/"
+      pic_tooltip: "Go to my LinkedIn"
 
 smtp:
   hostname: "localhost"
