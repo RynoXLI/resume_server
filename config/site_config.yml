@@ -46,7 +46,7 @@ index:
       - company: "Caterpillar Inc."
         pic_url: "static/images/cat.png"
         alt: "Caterpillar Logo"
-        job_title: "Data Analytics Intern, Backend Development"
+        job_title: "Data Analytics Intern, Machine IoT"
         location: "Champaign, IL"
         date_range: "March 2020 - Current"
         description:
