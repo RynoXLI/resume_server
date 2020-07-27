@@ -27,8 +27,8 @@ index:
             title: "Honors and Leadership"
             items:
               - "Dean's List"
-              - "2020 Bauling/Perish Award Recipient"
-              - "2019 Bauling/Perish Award Recipient"
+              - "2020 Bauling/Pershing Memorial Award Recipient"
+              - "2019 Bauling/Pershing Memorial Award Recipient"
         - school: "Illinois Central College"
           pic_url: "static/images/icc.jpg"
           degree: "Engineering Undergraduate"
@@ -53,10 +53,10 @@ index:
           title: "Job Description"
           items:
             - "Revised a REST application programming interface on a Flask framework."
-            - "Used Python to parallel process and search the contents of 80,000 files."
+            - "Implemented Python to parallel process and search the contents of 80,000 files to measure data quality."
             - "Created a parser with regular expressions to create conditional arguments for analyses."
             - "Created, updated, and maintained tables in a MySQL database."
-            - "Served as team leader for summer interns."
+            - "Aided with onboarding and coaching of summer interns."
       - company: "Caterpillar Inc."
         pic_url: "static/images/cat.png"
         job_title: "Engineering Intern, Remanufacturing"
@@ -78,7 +78,7 @@ index:
         description:
           title: "Job Description"
           items:
-            - "Applied new data management techniques through simplifying a 18,000 rowed database table to 200 rowed table."
+            - "Applied new data management techniques through simplifying an 18,000 rowed database table to 200 rowed table."
             - "Developed an in-depth Python algorithm for flash file compilation and compression which reduced file size by 90 percent."
             - "Implemented both back-end and front-end programming by creating graphical user interfaces."
             - "Maintained schedules for multiple programming projects."
