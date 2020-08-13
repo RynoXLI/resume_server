@@ -20,3 +20,22 @@ $('.navbar li a.anchor').click(function(event) {
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
 });
+
+function setAnniversary() {
+    const date = new Date();
+    console.log(date.getTimezoneOffset());
+    const today = date.getTime();
+    const anniversary = new Date(2019, 10, 12);
+
+    const diffTime = Math.abs(date - anniversary);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60) - diffDays * 24);
+    const diffMins = Math.floor(diffTime / (1000 * 60) - (diffDays * 24 * 60 + diffHours * 60));
+    const diffSecs = Math.floor(diffTime / 1000 - (diffDays * 24 * 60 * 60 + diffHours * 60 * 60 + diffMins * 60));
+
+    $("#clock").text(diffDays + " days, " + diffHours + " hours, " + diffMins + " minutes, and " + diffSecs + " seconds" );
+//    console.log(diffDays + " days");
+//    console.log(diffHours + " hours");
+//    console.log(diffMins + " minutes");
+//    console.log(diffSecs + " seconds");
+};

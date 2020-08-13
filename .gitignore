@@ -5,3 +5,4 @@ config/email_info.yml
 *.pyc
 ec2-aws.pem
 *.pem
+/.ipynb_checkpoints

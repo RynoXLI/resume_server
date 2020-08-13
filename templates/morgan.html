@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('message') }}">Leave a Message</a>
+    </li>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="font-weight-bold text-center pt-3">R+M</h1>
+    <div class="col text-center">
+        <p id="clock"></p>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    setInterval(setAnniversary, 1000);
+</script>
+{% endblock scripts %}

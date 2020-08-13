@@ -1,3 +1,12 @@
+import smtplib
+import ssl
+from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from string import Template
+
+import jinja2
+import yaml
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import (
@@ -9,14 +18,6 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.fields.html5 import EmailField
-import yaml
-from datetime import datetime
-import smtplib, ssl
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import jinja2
-
-from string import Template
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
@@ -64,7 +65,7 @@ class Post(db.Model):
 def home():
     now = datetime.now()
     return render_template(
-        "index.html", time=now, base=conf["base"], conf=conf["index"]
+        "index.html", base=conf["base"], conf=conf["index"]
     )
 
 
@@ -155,6 +156,12 @@ def more():
     return render_template("more.html", time=now, base=conf["base"], conf=conf["more"])
 
 
+@app.route("/morgan")
+def morgan():
+    return render_template("morgan.html", base=conf['base'])
+
+
+
 @app.errorhandler(404)
 def error_404(e):
     now = datetime.now()
@@ -162,4 +169,4 @@ def error_404(e):
 
 
 if __name__ == "__main__":
-    app.run(port=5000, host='0.0.0.0', debug=True)
+    app.run(port=5000, host='localhost', debug=True)
