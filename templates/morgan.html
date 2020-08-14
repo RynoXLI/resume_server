@@ -9,9 +9,14 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="font-weight-bold text-center pt-3">R+M</h1>
-    <div class="col text-center">
-        <p id="clock"></p>
+    <div class="row">
+
+        <div class="col text-center align-items-center">
+            <h1 class="font-weight-bold text-center pt-3">R+M</h1>
+            <p class="font-weight-bold" id="clock">Loading counter...</p>
+            <img src="{{ url_for('static', filename='images/Morgan.jpg') }}" class="application img-thumbnail p-1 m-1 img-responsive" alt="Pic of us :)">
+            <p class="font-weight-bold">PS: I love you</p>
+        </div>
     </div>
 </div>
 {% endblock content %}

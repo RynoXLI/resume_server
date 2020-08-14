@@ -25,15 +25,57 @@ function setAnniversary() {
     const date = new Date();
     console.log(date.getTimezoneOffset());
     const today = date.getTime();
-    const anniversary = new Date(2019, 10, 12);
+    const anniversary = new Date(2019, 10, 12, 1);
 
     const diffTime = Math.abs(date - anniversary);
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor(diffTime / (1000 * 60 * 60) - diffDays * 24);
-    const diffMins = Math.floor(diffTime / (1000 * 60) - (diffDays * 24 * 60 + diffHours * 60));
-    const diffSecs = Math.floor(diffTime / 1000 - (diffDays * 24 * 60 * 60 + diffHours * 60 * 60 + diffMins * 60));
+    const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24) - diffYears * 365);
+    const diffHours = Math.floor(diffTime / (1000 * 60 * 60) - (diffYears * 365 + diffDays)*24);
+    const diffMins = Math.floor(diffTime / (1000 * 60) - (diffYears * 365 * 24 + diffDays * 24 + diffHours)*60);
+    const diffSecs = Math.floor(diffTime / 1000 - (diffYears * 365 * 24 * 60 + diffDays * 24 * 60 + diffHours * 60 + diffMins)*60);
 
-    $("#clock").text(diffDays + " days, " + diffHours + " hours, " + diffMins + " minutes, and " + diffSecs + " seconds" );
+    let msg = "";
+    let second = "seconds";
+    let min = "minutes";
+    let hour = "hours";
+    let day = "days";
+    let year = "years";
+
+    if (diffSecs == 1) {
+        second = "second";
+    }
+    if (diffMins == 1) {
+        min = "minute";
+    }
+    if (diffHours == 1) {
+        hour = "hour";
+    }
+    if (diffDays == 1) {
+        day = 'day';
+    }
+    if (diffYears == 1) {
+        year = 'year';
+    }
+
+    if (diffYears == 0 && diffDays == 0 && diffHours == 0 && diffMins == 0) {
+        msg = diffSecs + " seconds";
+    }
+    else if (diffYears == 0 && diffDays == 0 && diffHours == 0){
+        msg = diffMins + " " + min + " and " + diffSecs + " " + second;
+    }
+    else if (diffYears == 0 && diffDays == 0) {
+        msg = diffHours + " " + hour + ", " + diffMins + " " + min + ", and " + diffSecs + " " + second;
+    }
+    else if (diffYears == 0) {
+        msg = diffDays + " " + day + ", " + diffHours + " " + hour + ", " + diffMins + " " + min + ", and " + diffSecs + " " + second;
+    }
+    else {
+        msg = diffYears + " " + year + ", " + diffDays + " " + day + ", " + diffHours + " " + hour + ", " + diffMins + " " + min + ", and " + diffSecs + " " + second;
+    }
+
+
+    $("#clock").text(msg);
+//     console.log(diffYears + " years")
 //    console.log(diffDays + " days");
 //    console.log(diffHours + " hours");
 //    console.log(diffMins + " minutes");
