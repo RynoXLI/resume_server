@@ -23,9 +23,8 @@ $(document).ready(function(){
 
 function setAnniversary() {
     const date = new Date();
-    console.log(date.getTimezoneOffset());
     const today = date.getTime();
-    const anniversary = new Date(2019, 10, 12, 1);
+    const anniversary = new Date(2019, 9, 12);
 
     const diffTime = Math.abs(date - anniversary);
     const diffYears = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365));
