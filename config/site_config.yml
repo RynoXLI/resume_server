@@ -133,6 +133,7 @@ index:
           - name: "YAML"
             pic_url: "static/images/yaml.png"
 
+
 more:
   sections:
     - title: "Website Repo"
@@ -145,6 +146,13 @@ more:
       pic_url: "static/images/github.png"
       pic_link: "https://github.com/RynoXLI/resume_server"
       pic_tooltip: "Go to Github Repo"
+    - title: "Caterpillar"
+      body: "Unfortunately the repositories I worked on within Caterpillar are intelectual property of Caterpillar, although
+      if you work within Caterpillar I would gladly show you."
+      pic_name: "Caterpillar"
+      pic_url: "static/images/cat.png"
+      pic_link: ""
+      pic_tooltip: "Caterpillar"
     - title: "LinkedIn"
       body: "Check me out on LinkedIn! If any co-workers, friends, or family happen to land on this page
                  feel free to endorse me!"
