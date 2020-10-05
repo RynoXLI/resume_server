@@ -167,6 +167,8 @@ smtp:
   username: ""
   password: ""
 
+factorio_instance: "i-0cd692cb7106be2b9"
+
 
 
 

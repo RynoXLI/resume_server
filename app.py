@@ -4,10 +4,11 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
+import boto3
 
 import jinja2
 import yaml
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import (
     Form,
@@ -28,6 +29,9 @@ conf = yaml.load(open("config/site_config.yml", "r"), Loader=yaml.Loader)
 
 # load email_info.yml
 email_info = yaml.load(open("config/email_info.yml", "r"), Loader=yaml.Loader)
+
+# load ec2
+ec2 = boto3.client('ec2')
 
 message_template = (
     "Someone sent a message!\n"
@@ -161,11 +165,58 @@ def morgan():
     return render_template("morgan.html", base=conf['base'])
 
 
+@app.route("/factorio")
+def factorio():
+    try:
+        instance = boto3.resource('ec2').Instance("i-0cd692cb7106be2b9")
+        state = instance.state['Name']
+    except:
+        state = "N/A"
+
+    ip = get_ip()
+
+    return render_template("factorio.html", base=conf['base'], state=state, ip=ip)
+
+
+@app.route('/startfactorio')
+def start_factorio():
+    try:
+        ec2.start_instances(InstanceIds=[conf['factorio_instance']])
+    except:
+        return jsonify({'status': 'Error starting. Try again in two minutes'})
+
+    return jsonify({"status": "Server Starting"})
+
+
+@app.route('/stopfactorio')
+def stop_factorio():
+    try:
+        ec2.stop_instances(InstanceIds=[conf['factorio_instance']])
+    except:
+        return jsonify({"status": "Error stopping"})
+
+    return jsonify({"status": "Server Stopping"})
+
+
+@app.route('/ipaddress')
+def ip_address():
+    ip = get_ip()
+    return jsonify({"IP": ip})
+
 
 @app.errorhandler(404)
 def error_404(e):
     now = datetime.now()
     return render_template("error_404.html", time=now, base=conf["base"]), 404
+
+
+def get_ip():
+    try:
+        instance = ec2.describe_instances(InstanceIds=[conf['factorio_instance']])
+        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        return ip
+    except:
+        return "N/A"
 
 
 if __name__ == "__main__":

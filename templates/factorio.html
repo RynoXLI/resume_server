@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('message') }}">Leave a Message</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('more') }}">See More</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('static', filename='ryanfogle_resume.pdf') }}" download>Download Resume</a>
+    </li>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="font-weight-bold text-center pt-3">Factorio Server</h1>
+    <p class="text-center">Start and Stop Factorio Server</p>
+    <div class="col text-center">
+        <a href="/startfactorio">
+            <button class="btn btn-outline-success center-block">Start Factorio</button>
+        </a>
+        <a href="/ipaddress">
+            <button class="btn btn-outline-warning center-block">IP Address</button>
+        </a>
+        <a href="/stopfactorio">
+            <button class="btn btn-outline-danger center-block">Stop Factorio</button>
+        </a>
+    </div>
+    <p class="text-center pt-2">Server Status: {{ state }}</p>
+    <p class="text-center">IP Address: {{ ip }}</p>
+</div>
+{% endblock content %}
