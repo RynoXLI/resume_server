@@ -18,17 +18,32 @@
     <h1 class="font-weight-bold text-center pt-3">Factorio Server</h1>
     <p class="text-center">Start and Stop Factorio Server</p>
     <div class="col text-center">
-        <a href="/startfactorio">
-            <button class="btn btn-outline-success center-block">Start Factorio</button>
+        <a id="startfactorio">
+            <button class="btn btn-outline-success center-block" onclick="startFactorio()">Start Factorio</button>
         </a>
-        <a href="/ipaddress">
-            <button class="btn btn-outline-warning center-block">IP Address</button>
+        <a id="ipaddress">
+            <button onclick="getIPaddress()" class="btn btn-outline-warning center-block">IP Address</button>
         </a>
 <!--        <a href="/stopfactorio">-->
 <!--            <button class="btn btn-outline-danger center-block">Stop Factorio</button>-->
 <!--        </a>-->
     </div>
-    <p class="text-center pt-2">Server Status: {{ state }}</p>
-    <p class="text-center">IP Address: {{ ip }}</p>
+    <p class="text-center pt-2">Server Status: <span id="status"></span></p>
+    <p class="text-center">IP Address: <span id="ip"></span></p>
+    <p class="text-center"><i>Server Info: The server checks if anyone is on the server every 10 minutes starting from
+    12am each day and immediately shuts down if no one is on. Try to start the server a few minutes before a 10 minute
+    mark to give the server time to boot up and let you in.</i></p>
 </div>
 {% endblock content %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        // Run it first
+        getIPaddress();
+        getStatus();
+
+        setInterval(getIPaddress, 5000);
+        setInterval(getStatus, 5000);
+    });
+</script>
+{% endblock scripts %}

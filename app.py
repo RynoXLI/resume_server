@@ -167,15 +167,7 @@ def morgan():
 
 @app.route("/factorio")
 def factorio():
-    try:
-        instance = boto3.resource('ec2').Instance("i-0cd692cb7106be2b9")
-        state = instance.state['Name']
-    except:
-        state = "N/A"
-
-    ip = get_ip()
-
-    return render_template("factorio.html", base=conf['base'], state=state, ip=ip)
+    return render_template("factorio.html", base=conf['base'])
 
 
 @app.route('/startfactorio')
@@ -196,6 +188,16 @@ def stop_factorio():
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
+
+
+@app.route('/factoriostatus')
+def factorio_status():
+    try:
+        instance = boto3.resource('ec2').Instance("i-0cd692cb7106be2b9")
+        state = instance.state['Name']
+    except:
+        state = "N/A"
+    return jsonify({"status": state})
 
 
 @app.route('/ipaddress')

@@ -80,3 +80,36 @@ function setAnniversary() {
 //    console.log(diffMins + " minutes");
 //    console.log(diffSecs + " seconds");
 };
+
+function getIPaddress() {
+    $.ajax({
+    url: "/ipaddress",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#ip').text(res['IP']);
+    }});
+}
+
+function getStatus() {
+    $.ajax({
+    url: "/factoriostatus",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#status').text(res['status']);
+    }});
+}
+
+function startFactorio() {
+    $.ajax({
+    url: "/startfactorio",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#status').text(res['status']);
+    }});
+}
