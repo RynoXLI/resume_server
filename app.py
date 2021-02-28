@@ -169,11 +169,25 @@ def morgan():
 def factorio():
     return render_template("factorio.html", base=conf['base'])
 
+@app.route("/abe424")
+def abe424():
+    return render_template("abe424.html", base=conf['base'])
+
 
 @app.route('/startfactorio')
 def start_factorio():
     try:
         ec2.start_instances(InstanceIds=[conf['factorio_instance']])
+    except:
+        return jsonify({'status': 'Error starting. Try again in two minutes'})
+
+    return jsonify({"status": "Server Starting"})
+
+
+@app.route('/startabe424')
+def start_abe424():
+    try:
+        ec2.start_instances(InstanceIds=[conf['abe424_instance']])
     except:
         return jsonify({'status': 'Error starting. Try again in two minutes'})
 
@@ -190,10 +204,30 @@ def stop_factorio():
     return jsonify({"status": "Server Stopping"})
 
 
+@app.route('/stopabe424')
+def stop_abe424():
+    try:
+        ec2.stop_instances(InstanceIds=[conf['abe424_instance']])
+    except:
+        return jsonify({"status": "Error stopping"})
+
+    return jsonify({"status": "Server Stopping"})
+
+
 @app.route('/factoriostatus')
 def factorio_status():
     try:
-        instance = boto3.resource('ec2').Instance("i-0cd692cb7106be2b9")
+        instance = boto3.resource('ec2').Instance(conf['factorio_instance'])
+        state = instance.state['Name']
+    except:
+        state = "N/A"
+    return jsonify({"status": state})
+
+
+@app.route('/abe424status')
+def abe424_status():
+    try:
+        instance = boto3.resource('ec2').Instance(conf['abe424_instance'])
         state = instance.state['Name']
     except:
         state = "N/A"
@@ -206,6 +240,12 @@ def ip_address():
     return jsonify({"IP": ip})
 
 
+@app.route('/ipabe424address')
+def ip_abe424_address():
+    ip = get_abe424_ip()
+    return jsonify({"IP": ip})
+
+
 @app.errorhandler(404)
 def error_404(e):
     now = datetime.now()
@@ -215,6 +255,15 @@ def error_404(e):
 def get_ip():
     try:
         instance = ec2.describe_instances(InstanceIds=[conf['factorio_instance']])
+        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        return ip
+    except:
+        return "N/A"
+
+
+def get_abe424_ip():
+    try:
+        instance = ec2.describe_instances(InstanceIds=[conf['abe424_instance']])
         ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:

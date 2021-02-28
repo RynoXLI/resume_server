@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('message') }}">Leave a Message</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('more') }}">See More</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('static', filename='ryanfogle_resume.pdf') }}" download>Download Resume</a>
+    </li>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="font-weight-bold text-center pt-3">ABE 424 Server</h1>
+    <p class="text-center">Start and Stop ABE 424 Server</p>
+    <div class="col text-center">
+        <a id="startabe424">
+            <button class="btn btn-outline-success center-block" onclick="startABE424()">Start ABE 424</button>
+        </a>
+        <a id="ipabe424address">
+            <button onclick="getABE424IPaddress()" class="btn btn-outline-warning center-block">IP Address</button>
+        </a>
+       <a id="stopabe424">
+            <button onclick="stopABE424()" class="btn btn-outline-danger center-block">Stop ABE 424</button>
+        </a>
+    </div>
+    <p class="text-center pt-2">Server Status: <span id="abe424status"></span></p>
+    <p class="text-center">IP Address: <span id="ipabe424"></span></p>
+    <p class="text-center"><i>Server Info: Please shut down server when done. If server is not running, click start server.
+        Use the new IP address to Remote desktop into the server. Once in, use the same username and password as before. 
+        Remember to shut down when done, none of your work will be lost if you save it. 
+    </i></p>
+</div>
+{% endblock content %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        // Run it first
+        getABE424IPaddress();
+        getABE424Status();
+
+        setInterval(getABE424IPaddress, 5000);
+        setInterval(getABE424Status, 5000);
+    });
+</script>
+{% endblock scripts %}

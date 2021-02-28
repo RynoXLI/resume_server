@@ -92,6 +92,18 @@ function getIPaddress() {
     }});
 }
 
+// get abe424 status
+function getABE424IPaddress() {
+    $.ajax({
+    url: "/ipabe424address",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#ipabe424').text(res['IP']);
+    }});
+}
+
 function getStatus() {
     $.ajax({
     url: "/factoriostatus",
@@ -103,6 +115,17 @@ function getStatus() {
     }});
 }
 
+function getABE424Status() {
+    $.ajax({
+    url: "/abe424status",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#abe424status').text(res['status']);
+    }});
+}
+
 function startFactorio() {
     $.ajax({
     url: "/startfactorio",
@@ -111,5 +134,27 @@ function startFactorio() {
     success: function(res) {
         console.log(res);
         $('#status').text(res['status']);
+    }});
+}
+
+function startABE424() {
+    $.ajax({
+    url: "/startabe424",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#abe424status').text(res['status']);
+    }});
+}
+
+function stopABE424() {
+    $.ajax({
+    url: "/stopabe424",
+    type: "GET",
+    dataType: 'json',
+    success: function(res) {
+        console.log(res);
+        $('#abe424status').text(res['status']);
     }});
 }
