@@ -30,6 +30,9 @@ conf = yaml.load(open("config/site_config.yml", "r"), Loader=yaml.Loader)
 # load email_info.yml
 email_info = yaml.load(open("config/email_info.yml", "r"), Loader=yaml.Loader)
 
+# load aws_config.yml
+aws_config = yaml.load(open("config/aws_config.yml", "r"), Loader=yaml.Loader)
+
 # load ec2
 ec2 = boto3.client('ec2')
 
@@ -177,7 +180,7 @@ def abe424():
 @app.route('/startfactorio')
 def start_factorio():
     try:
-        ec2.start_instances(InstanceIds=[conf['factorio_instance']])
+        ec2.start_instances(InstanceIds=[aws_config['factorio_instance']])
     except:
         return jsonify({'status': 'Error starting. Try again in two minutes'})
 
@@ -187,7 +190,7 @@ def start_factorio():
 @app.route('/startabe424')
 def start_abe424():
     try:
-        ec2.start_instances(InstanceIds=[conf['abe424_instance']])
+        ec2.start_instances(InstanceIds=[aws_config['abe424_instance']])
     except:
         return jsonify({'status': 'Error starting. Try again in two minutes'})
 
@@ -197,7 +200,7 @@ def start_abe424():
 @app.route('/stopfactorio')
 def stop_factorio():
     try:
-        ec2.stop_instances(InstanceIds=[conf['factorio_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config['factorio_instance']])
     except:
         return jsonify({"status": "Error stopping"})
 
@@ -207,7 +210,7 @@ def stop_factorio():
 @app.route('/stopabe424')
 def stop_abe424():
     try:
-        ec2.stop_instances(InstanceIds=[conf['abe424_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config['abe424_instance']])
     except:
         return jsonify({"status": "Error stopping"})
 
@@ -217,7 +220,7 @@ def stop_abe424():
 @app.route('/factoriostatus')
 def factorio_status():
     try:
-        instance = boto3.resource('ec2').Instance(conf['factorio_instance'])
+        instance = boto3.resource('ec2').Instance(aws_config['factorio_instance'])
         state = instance.state['Name']
     except:
         state = "N/A"
@@ -227,7 +230,7 @@ def factorio_status():
 @app.route('/abe424status')
 def abe424_status():
     try:
-        instance = boto3.resource('ec2').Instance(conf['abe424_instance'])
+        instance = boto3.resource('ec2').Instance(aws_config['abe424_instance'])
         state = instance.state['Name']
     except:
         state = "N/A"
@@ -254,7 +257,7 @@ def error_404(e):
 
 def get_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[conf['factorio_instance']])
+        instance = ec2.describe_instances(InstanceIds=[aws_config['factorio_instance']])
         ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:
@@ -263,7 +266,7 @@ def get_ip():
 
 def get_abe424_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[conf['abe424_instance']])
+        instance = ec2.describe_instances(InstanceIds=[aws_config['abe424_instance']])
         ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:

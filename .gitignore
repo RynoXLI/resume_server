@@ -1,10 +1,9 @@
 /.idea
 site.db
-/config/*
 *.ipynb
 *.pyc
 ec2-aws.pem
 *.pem
 /.ipynb_checkpoints
-/config/site_config.yml
 /config/email_info.yml
+/config/aws_config.yml
