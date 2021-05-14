@@ -34,7 +34,13 @@ email_info = yaml.load(open("config/email_info.yml", "r"), Loader=yaml.Loader)
 aws_config = yaml.load(open("config/aws_config.yml", "r"), Loader=yaml.Loader)
 
 # load ec2
-ec2 = boto3.client('ec2')
+session = boto3.Session(
+    aws_access_key_id=aws_config["access_key_id"],
+    aws_secret_access_key=aws_config["secret_access_key"],
+    region_name=aws_config['region']
+)
+
+ec2 = session.client("ec2")
 
 message_template = (
     "Someone sent a message!\n"
@@ -71,9 +77,7 @@ class Post(db.Model):
 @app.route("/")
 def home():
     now = datetime.now()
-    return render_template(
-        "index.html", base=conf["base"], conf=conf["index"]
-    )
+    return render_template("index.html", base=conf["base"], conf=conf["index"])
 
 
 @app.route("/message", methods=["GET", "POST"])
@@ -165,85 +169,86 @@ def more():
 
 @app.route("/morgan")
 def morgan():
-    return render_template("morgan.html", base=conf['base'])
+    return render_template("morgan.html", base=conf["base"])
 
 
 @app.route("/factorio")
 def factorio():
-    return render_template("factorio.html", base=conf['base'])
+    return render_template("factorio.html", base=conf["base"])
+
 
 @app.route("/abe424")
 def abe424():
-    return render_template("abe424.html", base=conf['base'])
+    return render_template("abe424.html", base=conf["base"])
 
 
-@app.route('/startfactorio')
+@app.route("/startfactorio")
 def start_factorio():
     try:
-        ec2.start_instances(InstanceIds=[aws_config['factorio_instance']])
+        ec2.start_instances(InstanceIds=[aws_config["factorio_instance"]])
     except:
-        return jsonify({'status': 'Error starting. Try again in two minutes'})
+        return jsonify({"status": "Error starting. Try again in two minutes"})
 
     return jsonify({"status": "Server Starting"})
 
 
-@app.route('/startabe424')
+@app.route("/startabe424")
 def start_abe424():
     try:
-        ec2.start_instances(InstanceIds=[aws_config['abe424_instance']])
+        ec2.start_instances(InstanceIds=[aws_config["abe424_instance"]])
     except:
-        return jsonify({'status': 'Error starting. Try again in two minutes'})
+        return jsonify({"status": "Error starting. Try again in two minutes"})
 
     return jsonify({"status": "Server Starting"})
 
 
-@app.route('/stopfactorio')
+@app.route("/stopfactorio")
 def stop_factorio():
     try:
-        ec2.stop_instances(InstanceIds=[aws_config['factorio_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config["factorio_instance"]])
     except:
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
 
 
-@app.route('/stopabe424')
+@app.route("/stopabe424")
 def stop_abe424():
     try:
-        ec2.stop_instances(InstanceIds=[aws_config['abe424_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config["abe424_instance"]])
     except:
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
 
 
-@app.route('/factoriostatus')
+@app.route("/factoriostatus")
 def factorio_status():
     try:
-        instance = boto3.resource('ec2').Instance(aws_config['factorio_instance'])
-        state = instance.state['Name']
+        instance = session.resource("ec2").Instance(aws_config["factorio_instance"])
+        state = instance.state["Name"]
     except:
         state = "N/A"
     return jsonify({"status": state})
 
 
-@app.route('/abe424status')
+@app.route("/abe424status")
 def abe424_status():
     try:
-        instance = boto3.resource('ec2').Instance(aws_config['abe424_instance'])
-        state = instance.state['Name']
+        instance = session.resource("ec2").Instance(aws_config["abe424_instance"])
+        state = instance.state["Name"]
     except:
         state = "N/A"
     return jsonify({"status": state})
 
 
-@app.route('/ipaddress')
+@app.route("/ipaddress")
 def ip_address():
     ip = get_ip()
     return jsonify({"IP": ip})
 
 
-@app.route('/ipabe424address')
+@app.route("/ipabe424address")
 def ip_abe424_address():
     ip = get_abe424_ip()
     return jsonify({"IP": ip})
@@ -257,8 +262,8 @@ def error_404(e):
 
 def get_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config['factorio_instance']])
-        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        instance = ec2.describe_instances(InstanceIds=[aws_config["factorio_instance"]])
+        ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:
         return "N/A"
@@ -266,12 +271,12 @@ def get_ip():
 
 def get_abe424_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config['abe424_instance']])
-        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        instance = ec2.describe_instances(InstanceIds=[aws_config["abe424_instance"]])
+        ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:
         return "N/A"
 
 
 if __name__ == "__main__":
-    app.run(port=5000, host='localhost', debug=True)
+    app.run(port=5000, host="localhost", debug=True)
