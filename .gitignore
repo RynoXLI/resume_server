@@ -7,3 +7,5 @@ ec2-aws.pem
 /.ipynb_checkpoints
 /config/email_info.yml
 /config/aws_config.yml
+\[internal\]
+/env
