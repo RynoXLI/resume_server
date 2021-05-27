@@ -41,7 +41,13 @@ email_info = yaml.load(open("config/email_info.yml", "r"), Loader=yaml.Loader)
 aws_config = yaml.load(open("config/aws_config.yml", "r"), Loader=yaml.Loader)
 
 # load ec2
-ec2 = boto3.client("ec2")
+session = boto3.Session(
+    aws_access_key_id=aws_config["access_key_id"],
+    aws_secret_access_key=aws_config["secret_access_key"],
+    region_name=aws_config['region']
+)
+
+ec2 = session.client("ec2")
 
 message_template = (
     "Someone sent a message!\n"
@@ -53,7 +59,29 @@ message_template = (
 )
 message_template = Template(message_template)
 
-os.system(f'aws s3 sync uploads s3://{aws_config["bucket"]}/uploads')
+def download_s3_folder(bucket_name, s3_folder, local_dir=None):
+    """
+    Download the contents of a folder directory
+    Args:
+        bucket_name: the name of the s3 bucket
+        s3_folder: the folder path in the s3 bucket
+        local_dir: a relative or absolute directory path in the local file system
+    """
+    s3 = session.resource('s3')
+    bucket = s3.Bucket(bucket_name)
+    for obj in bucket.objects.filter(Prefix=s3_folder):
+        target = obj.key if local_dir is None \
+            else os.path.join(local_dir, os.path.relpath(obj.key, s3_folder))
+        if not os.path.exists(os.path.dirname(target)):
+            os.makedirs(os.path.dirname(target))
+        if obj.key[-1] == '/':
+            continue
+        bucket.download_file(obj.key, target)
+
+# os.system(f'aws s3 sync uploads s3://{aws_config["bucket"]}/uploads')
+# sync.S3Sync(session).sync('uploads', f"{aws_config['bucket']}")
+
+download_s3_folder(aws_config['bucket'], 'uploads')
 
 class Message(Form):
     email = EmailField("Email Address", [validators.DataRequired(), validators.Email()])
@@ -227,7 +255,7 @@ def stop_abe424():
 @app.route("/factoriostatus")
 def factorio_status():
     try:
-        instance = boto3.resource("ec2").Instance(aws_config["factorio_instance"])
+        instance =session.resource("ec2").Instance(aws_config["factorio_instance"])
         state = instance.state["Name"]
     except:
         state = "N/A"
@@ -237,7 +265,7 @@ def factorio_status():
 @app.route("/abe424status")
 def abe424_status():
     try:
-        instance = boto3.resource("ec2").Instance(aws_config["abe424_instance"])
+        instance = session.resource("ec2").Instance(aws_config["abe424_instance"])
         state = instance.state["Name"]
     except:
         state = "N/A"
@@ -284,7 +312,7 @@ def upload_file(file_name, bucket=aws_config['bucket']):
     Function to upload a file to an S3 bucket
     """
     object_name = file_name
-    s3_client = boto3.client('s3')
+    s3_client = session.client('s3')
     response = s3_client.upload_file(file_name, bucket, object_name)
 
     return response
@@ -293,7 +321,7 @@ def download_file(file_name, bucket=aws_config['bucket']):
     """
     Function to download a given file from an S3 bucket
     """
-    s3 = boto3.resource('s3')
+    s3 = session.resource('s3')
     output = f"downloads/{file_name}"
     s3.Bucket(bucket).download_file(file_name, output)
 
@@ -303,7 +331,7 @@ def list_files(bucket=aws_config['bucket'], prefix='uploads/'):
     """
     Function to list files in a given S3 bucket
     """
-    s3 = boto3.resource('s3')
+    s3 = session.resource('s3')
     contents = []
     photo_bucket = s3.Bucket(aws_config['bucket'])
 
