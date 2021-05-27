@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+    </li>
+{% endblock navbar %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class='col text-center align-items-center'>
+      <h1>File Upload</h1>
+    </div>
+  </div>
+  <br />
+  <div class='row'>
+    <div class='col text-center align-items-center'>
+      <form method="POST" action="" enctype="multipart/form-data">
+        <p><input type="file" accept=".jpg, .png, .gif, .heic" name="file"></p>
+        <p><input type="submit" value="Submit"></p>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

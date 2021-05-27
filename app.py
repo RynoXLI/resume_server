@@ -5,10 +5,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
 import boto3
+import os
+import imghdr
 
 import jinja2
 import yaml
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, send_from_directory, abort
 from flask_sqlalchemy import SQLAlchemy
 from wtforms import (
     Form,
@@ -19,9 +21,14 @@ from wtforms import (
     SubmitField,
 )
 from wtforms.fields.html5 import EmailField
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+app.config["UPLOAD_FOLDER"] = 'uploads'
+app.config["UPLOAD_EXTENSIONS"] = ['.jpg', '.png', '.gif']
+app.add_url_rule('/uploads/<path:filename>', endpoint='uploads', view_func=app.send_static_file)
+
 db = SQLAlchemy(app)
 
 # load the config file
@@ -34,7 +41,7 @@ email_info = yaml.load(open("config/email_info.yml", "r"), Loader=yaml.Loader)
 aws_config = yaml.load(open("config/aws_config.yml", "r"), Loader=yaml.Loader)
 
 # load ec2
-ec2 = boto3.client('ec2')
+ec2 = boto3.client("ec2")
 
 message_template = (
     "Someone sent a message!\n"
@@ -46,6 +53,7 @@ message_template = (
 )
 message_template = Template(message_template)
 
+os.system(f'aws s3 sync uploads s3://{aws_config["bucket"]}/uploads')
 
 class Message(Form):
     email = EmailField("Email Address", [validators.DataRequired(), validators.Email()])
@@ -71,9 +79,7 @@ class Post(db.Model):
 @app.route("/")
 def home():
     now = datetime.now()
-    return render_template(
-        "index.html", base=conf["base"], conf=conf["index"]
-    )
+    return render_template("index.html", base=conf["base"], conf=conf["index"])
 
 
 @app.route("/message", methods=["GET", "POST"])
@@ -165,85 +171,86 @@ def more():
 
 @app.route("/morgan")
 def morgan():
-    return render_template("morgan.html", base=conf['base'])
+    return render_template("morgan.html", base=conf["base"], files=list_files())
 
 
 @app.route("/factorio")
 def factorio():
-    return render_template("factorio.html", base=conf['base'])
+    return render_template("factorio.html", base=conf["base"])
+
 
 @app.route("/abe424")
 def abe424():
-    return render_template("abe424.html", base=conf['base'])
+    return render_template("abe424.html", base=conf["base"])
 
 
-@app.route('/startfactorio')
+@app.route("/startfactorio")
 def start_factorio():
     try:
-        ec2.start_instances(InstanceIds=[aws_config['factorio_instance']])
+        ec2.start_instances(InstanceIds=[aws_config["factorio_instance"]])
     except:
-        return jsonify({'status': 'Error starting. Try again in two minutes'})
+        return jsonify({"status": "Error starting. Try again in two minutes"})
 
     return jsonify({"status": "Server Starting"})
 
 
-@app.route('/startabe424')
+@app.route("/startabe424")
 def start_abe424():
     try:
-        ec2.start_instances(InstanceIds=[aws_config['abe424_instance']])
+        ec2.start_instances(InstanceIds=[aws_config["abe424_instance"]])
     except:
-        return jsonify({'status': 'Error starting. Try again in two minutes'})
+        return jsonify({"status": "Error starting. Try again in two minutes"})
 
     return jsonify({"status": "Server Starting"})
 
 
-@app.route('/stopfactorio')
+@app.route("/stopfactorio")
 def stop_factorio():
     try:
-        ec2.stop_instances(InstanceIds=[aws_config['factorio_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config["factorio_instance"]])
     except:
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
 
 
-@app.route('/stopabe424')
+@app.route("/stopabe424")
 def stop_abe424():
     try:
-        ec2.stop_instances(InstanceIds=[aws_config['abe424_instance']])
+        ec2.stop_instances(InstanceIds=[aws_config["abe424_instance"]])
     except:
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
 
 
-@app.route('/factoriostatus')
+@app.route("/factoriostatus")
 def factorio_status():
     try:
-        instance = boto3.resource('ec2').Instance(aws_config['factorio_instance'])
-        state = instance.state['Name']
+        instance = boto3.resource("ec2").Instance(aws_config["factorio_instance"])
+        state = instance.state["Name"]
     except:
         state = "N/A"
     return jsonify({"status": state})
 
 
-@app.route('/abe424status')
+@app.route("/abe424status")
 def abe424_status():
     try:
-        instance = boto3.resource('ec2').Instance(aws_config['abe424_instance'])
-        state = instance.state['Name']
+        instance = boto3.resource("ec2").Instance(aws_config["abe424_instance"])
+        state = instance.state["Name"]
     except:
         state = "N/A"
     return jsonify({"status": state})
 
 
-@app.route('/ipaddress')
+@app.route("/ipaddress")
 def ip_address():
     ip = get_ip()
     return jsonify({"IP": ip})
 
 
-@app.route('/ipabe424address')
+@app.route("/ipabe424address")
 def ip_abe424_address():
     ip = get_abe424_ip()
     return jsonify({"IP": ip})
@@ -257,8 +264,8 @@ def error_404(e):
 
 def get_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config['factorio_instance']])
-        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        instance = ec2.describe_instances(InstanceIds=[aws_config["factorio_instance"]])
+        ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:
         return "N/A"
@@ -266,12 +273,86 @@ def get_ip():
 
 def get_abe424_ip():
     try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config['abe424_instance']])
-        ip = instance['Reservations'][0]["Instances"][0]["PublicIpAddress"]
+        instance = ec2.describe_instances(InstanceIds=[aws_config["abe424_instance"]])
+        ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:
         return "N/A"
 
+def upload_file(file_name, bucket=aws_config['bucket']):
+    """
+    Function to upload a file to an S3 bucket
+    """
+    object_name = file_name
+    s3_client = boto3.client('s3')
+    response = s3_client.upload_file(file_name, bucket, object_name)
+
+    return response
+
+def download_file(file_name, bucket=aws_config['bucket']):
+    """
+    Function to download a given file from an S3 bucket
+    """
+    s3 = boto3.resource('s3')
+    output = f"downloads/{file_name}"
+    s3.Bucket(bucket).download_file(file_name, output)
+
+    return output
+
+def list_files(bucket=aws_config['bucket'], prefix='uploads/'):
+    """
+    Function to list files in a given S3 bucket
+    """
+    s3 = boto3.resource('s3')
+    contents = []
+    photo_bucket = s3.Bucket(aws_config['bucket'])
+
+    for s3_obj in photo_bucket.objects.filter(Prefix=prefix):
+        file_name = s3_obj.key.replace(prefix, '', 1)
+        
+        if file_name != "":
+            contents.append(file_name)
+
+    return contents
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    format = imghdr.what(None, header)
+    if not format:
+        return None
+    return '.' + (format if format != 'jpeg' else 'jpg')
+
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == "POST":
+        f = request.files['file']
+        filename = secure_filename(f.filename)
+        if f.filename != '':
+            file_ext = os.path.splitext(filename)[1].lower()
+
+            if file_ext not in app.config['UPLOAD_EXTENSIONS'] or file_ext != validate_image(f.stream):
+                abort(400)
+            else: 
+                f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            upload_file(f"uploads/{filename}")
+
+        return redirect(url_for('morgan'))
+    return render_template('upload.html', base=conf['base'])
+
+
+@app.route('/uploads/<filename>')
+def get_upload(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/testlist')
+def test_list():
+    return jsonify({'msg': list_files(prefix='uploads/')})
+
 
 if __name__ == "__main__":
-    app.run(port=5000, host='localhost', debug=True)
+    app.run(port=5000, host="localhost", debug=True)
