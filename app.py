@@ -204,83 +204,53 @@ def morgan():
 
 @app.route("/factorio")
 def factorio():
-    return render_template("factorio.html", base=conf["base"])
+    return render_template("gameserver.html", base=conf["base"], name='factorio')
 
 
-@app.route("/abe424")
-def abe424():
-    return render_template("abe424.html", base=conf["base"])
+@app.route('/valheim')
+def valheim():
+    return render_template('gameserver.html', base=conf['base'], name='valheim')
 
 
-@app.route("/startfactorio")
-def start_factorio():
+@app.route('/start/<name>')
+def start_instance(name):
+    if name not in ["factorio", "valheim"]:
+        return 404
     try:
-        ec2.start_instances(InstanceIds=[aws_config["factorio_instance"]])
+        ec2.start_instances(InstanceIds=[aws_config[f"{name}_instance"]])
     except:
         return jsonify({"status": "Error starting. Try again in two minutes"})
 
     return jsonify({"status": "Server Starting"})
 
 
-@app.route("/startabe424")
-def start_abe424():
+@app.route("/stop/<name>")
+def stop_instance(name):
+    if name not in ['factorio', 'valheim']:
+        return 404
     try:
-        ec2.start_instances(InstanceIds=[aws_config["abe424_instance"]])
-    except:
-        return jsonify({"status": "Error starting. Try again in two minutes"})
-
-    return jsonify({"status": "Server Starting"})
-
-
-@app.route("/stopfactorio")
-def stop_factorio():
-    try:
-        ec2.stop_instances(InstanceIds=[aws_config["factorio_instance"]])
+        ec2.stop_instances(InstanceIds=[aws_config[f"{name}_instance"]])
     except:
         return jsonify({"status": "Error stopping"})
 
     return jsonify({"status": "Server Stopping"})
 
-
-@app.route("/stopabe424")
-def stop_abe424():
+@app.route('/status/<name>')
+def get_status(name):
+    if name not in ['factorio', 'valheim']:
+        return 404
     try:
-        ec2.stop_instances(InstanceIds=[aws_config["abe424_instance"]])
-    except:
-        return jsonify({"status": "Error stopping"})
-
-    return jsonify({"status": "Server Stopping"})
-
-
-@app.route("/factoriostatus")
-def factorio_status():
-    try:
-        instance =session.resource("ec2").Instance(aws_config["factorio_instance"])
+        instance =session.resource("ec2").Instance(aws_config[f"{name}_instance"])
         state = instance.state["Name"]
     except:
         state = "N/A"
     return jsonify({"status": state})
 
-
-@app.route("/abe424status")
-def abe424_status():
-    try:
-        instance = session.resource("ec2").Instance(aws_config["abe424_instance"])
-        state = instance.state["Name"]
-    except:
-        state = "N/A"
-    return jsonify({"status": state})
-
-
-@app.route("/ipaddress")
-def ip_address():
-    ip = get_ip()
-    return jsonify({"IP": ip})
-
-
-@app.route("/ipabe424address")
-def ip_abe424_address():
-    ip = get_abe424_ip()
+@app.route('/ipaddress/<name>')
+def ip_address(name):
+    if name not in ['factorio', 'valheim']:
+        return jsonify({'IP': "N/A"})
+    ip = get_ip(name)
     return jsonify({"IP": ip})
 
 
@@ -290,18 +260,9 @@ def error_404(e):
     return render_template("error_404.html", time=now, base=conf["base"]), 404
 
 
-def get_ip():
+def get_ip(name):
     try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config["factorio_instance"]])
-        ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
-        return ip
-    except:
-        return "N/A"
-
-
-def get_abe424_ip():
-    try:
-        instance = ec2.describe_instances(InstanceIds=[aws_config["abe424_instance"]])
+        instance = ec2.describe_instances(InstanceIds=[aws_config[f"{name}_instance"]])
         ip = instance["Reservations"][0]["Instances"][0]["PublicIpAddress"]
         return ip
     except:

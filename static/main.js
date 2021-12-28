@@ -156,34 +156,20 @@ function leapyear(year) {
     return (year % 100 === 0) ? (year % 400 === 0) : (year % 4 === 0);
 }
 
-
-
-function getIPaddress() {
+function getIPaddress(route) {
     $.ajax({
-    url: "/ipaddress",
-    type: "GET",
-    dataType: 'json',
-    success: function(res) {
-        console.log(res);
-        $('#ip').text(res['IP']);
-    }});
+        url: `/ipaddress/${route}`,
+        type: "GET",
+        dataType: 'json',
+        success: function(res) {
+            console.log(res);
+            $('#ip').text(res['IP']);
+        }});
 }
 
-// get abe424 status
-function getABE424IPaddress() {
+function getStatus(name) {
     $.ajax({
-    url: "/ipabe424address",
-    type: "GET",
-    dataType: 'json',
-    success: function(res) {
-        console.log(res);
-        $('#ipabe424').text(res['IP']);
-    }});
-}
-
-function getStatus() {
-    $.ajax({
-    url: "/factoriostatus",
+    url: `/status/${name}`,
     type: "GET",
     dataType: 'json',
     success: function(res) {
@@ -192,46 +178,13 @@ function getStatus() {
     }});
 }
 
-function getABE424Status() {
+function startInstance(name) {
     $.ajax({
-    url: "/abe424status",
-    type: "GET",
-    dataType: 'json',
-    success: function(res) {
-        console.log(res);
-        $('#abe424status').text(res['status']);
-    }});
-}
-
-function startFactorio() {
-    $.ajax({
-    url: "/startfactorio",
+    url: `/start/${name}`,
     type: "GET",
     dataType: 'json',
     success: function(res) {
         console.log(res);
         $('#status').text(res['status']);
-    }});
-}
-
-function startABE424() {
-    $.ajax({
-    url: "/startabe424",
-    type: "GET",
-    dataType: 'json',
-    success: function(res) {
-        console.log(res);
-        $('#abe424status').text(res['status']);
-    }});
-}
-
-function stopABE424() {
-    $.ajax({
-    url: "/stopabe424",
-    type: "GET",
-    dataType: 'json',
-    success: function(res) {
-        console.log(res);
-        $('#abe424status').text(res['status']);
     }});
 }

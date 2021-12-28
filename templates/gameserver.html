@@ -15,14 +15,14 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="font-weight-bold text-center pt-3">Factorio Server</h1>
-    <p class="text-center">Start and Stop Factorio Server</p>
+    <h1 class="font-weight-bold text-center pt-3">{{ name.title() }} Server</h1>
+    <p class="text-center">Start and Stop {{ name.title() }} Server</p>
     <div class="col text-center">
         <a id="startfactorio">
-            <button class="btn btn-outline-success center-block" onclick="startFactorio()">Start Factorio</button>
+            <button class="btn btn-outline-success center-block" onclick="startInstance('{{ name }}')">Start {{ name.title() }}</button>
         </a>
         <a id="ipaddress">
-            <button onclick="getIPaddress()" class="btn btn-outline-warning center-block">IP Address</button>
+            <button onclick="getIPaddress('{{ name }}')" class="btn btn-outline-warning center-block">IP Address</button>
         </a>
 <!--        <a href="/stopfactorio">-->
 <!--            <button class="btn btn-outline-danger center-block">Stop Factorio</button>-->
@@ -39,11 +39,11 @@
 <script>
     $(document).ready(function(){
         // Run it first
-        getIPaddress();
-        getStatus();
+        getIPaddress('{{ name }}');
+        getStatus('{{ name }}');
 
-        setInterval(getIPaddress, 5000);
-        setInterval(getStatus, 5000);
+        setInterval(() => getIPaddress('{{ name }}'), 5000);
+        setInterval(() => getStatus('{{ name }}'), 5000);
     });
 </script>
 {% endblock scripts %}
